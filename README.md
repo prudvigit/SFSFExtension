@@ -26,3 +26,5 @@ Learn more at https://cap.cloud.sap/docs/get-started/.
 
 CDS import:
 cds import /Users/prudvitarigonda/Downloads/ECPersonalInformation.edmx
+
+To run the app -> install npm module on the root project and run npm start

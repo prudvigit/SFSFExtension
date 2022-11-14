@@ -1,22 +1,27 @@
 {
   "name": "SFSFExtension",
   "version": "1.0.0",
-  "description": "A simple CAP project.",
-  "repository": "<Add your repository here>",
+  "description": "CAP project with Service Consumption",
+  "repository": "https://github.com/SAP-samples/teched2021-developer-keynote",
   "license": "UNLICENSED",
   "private": true,
   "dependencies": {
-    "@sap/cds": "^6",
-    "express": "^4"
+    "@graphql-tools/schema": "^8.3.1",
+    "@sap/cds": "^5.7.2",
+    "@sap/cds-odata-v2-adapter-proxy": "^1.8.4",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4",
+    "express-graphql": "^0.12.0",
+    "graphql": "^15.3.0",
+    "hdb": "^0.19.0"
   },
   "devDependencies": {
-    "sqlite3": "^5.0.4"
+    "cds-swagger-ui-express": "^0.3.0",
+    "sqlite3": "^5.0.2"
   },
   "scripts": {
-    "start": "cds run"
-  },
-  "engines": {
-    "node": "^16.15"
+    "start": "cds serve --with-mocks"
   },
   "eslintConfig": {
     "extends": "eslint:recommended",
@@ -44,11 +49,50 @@
     }
   },
   "cds": {
+    "preview": {
+      "ui5": {
+        "version": "1.97.0",
+        "theme": "sap_horizon"
+      }
+    },
+    "features": {
+      "preserve_computed": true,
+      "kibana_formatter": true,
+      "audit_personal_data": true,
+      "optimized_search": true,
+      "rest_new_adapter": true,
+      "graphql": true
+    },
+    "log": {
+      "service": true
+    },
     "requires": {
+      "db": {
+        "kind": "sql"
+      },
       "ECPersonalInformation": {
         "kind": "odata-v2",
-        "model": "srv/external/ECPersonalInformation"
+        "model": "srv/external/ECPersonalInformation",
+        "[development]": {
+          "credentials": {
+            "requestTimeout": 30000,
+            "url": "https://sandbox.api.sap.com/successfactors/odata/v2",
+            "authentication": "NoAuthentication"
+          }
+        },
+        "[production]": {
+          "credentials": {
+            "destination": "sfsfDest"
+          }
+        }
       }
+    },
+    "hana": {
+      "journal": {
+        "enable-drop": false,
+        "change-mode": "alter"
+      },
+      "deploy-format": "hdbtable"
     }
   }
 }
